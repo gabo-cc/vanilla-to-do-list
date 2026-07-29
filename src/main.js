@@ -33,10 +33,10 @@ window.onload = function() {
 };
 
 function addTask() {
-    let input = document.getElementById('taskInput');
-    let text = input.value;
+    const taskInput = document.getElementById('taskInput');
+    const taskText = taskInput.value.trim();
     
-    if (text == '') {
+    if (taskText === ''){
         alert('Por favor escribe una tarea');
         return;
     }
@@ -44,7 +44,7 @@ function addTask() {
 
     let newTask = {
         id: taskId++,
-        text: text,
+        text: taskText,
         completed: false,
         createdAt: new Date().toISOString()
     };
@@ -52,7 +52,7 @@ function addTask() {
     tasks.push(newTask);
     localStorage.setItem('tasks', JSON.stringify(tasks));
     
-    input.value = '';
+    taskInput.value = '';
     
     renderTasks();
     updateStats();
