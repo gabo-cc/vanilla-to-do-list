@@ -32,6 +32,10 @@ window.onload = function() {
     updateStats();
 };
 
+function saveTasks(){
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
 function addTask() {
     const taskInput = document.getElementById('taskInput');
     const taskText = taskInput.value.trim();
@@ -50,7 +54,7 @@ function addTask() {
     };
     
     tasks.push(newTask);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    saveTasks();
     
     taskInput.value = '';
     
@@ -120,7 +124,7 @@ function toggleTask(id) {
         }
     }
     
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    saveTasks();
     
     renderTasks();
     updateStats();
@@ -134,7 +138,7 @@ function deleteTask(id) {
         }
     }
     tasks = newTasks;
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    saveTasks();
     
     renderTasks();
     updateStats();
