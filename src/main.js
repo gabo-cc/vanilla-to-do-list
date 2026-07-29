@@ -42,6 +42,12 @@ function saveTasks(){
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
+function refreshUI(){
+    saveTasks();
+    renderTasks();
+    updateStats();
+}
+
 function addTask() {
     const taskInput = document.getElementById('taskInput');
     const taskText = taskInput.value.trim();
@@ -60,12 +66,10 @@ function addTask() {
     };
     
     tasks.push(newTask);
-    saveTasks();
     
     taskInput.value = '';
     
-    renderTasks();
-    updateStats();
+    refreshUI();
 }
 
 function getFilteredTasks() {
@@ -84,6 +88,35 @@ function getFilteredTasks() {
     return tasks;
 }
 
+function createTaskElement(task){
+    const taskDiv = document.createElement('div');
+    taskDiv.className = task.completed ? 'task-item completed' : 'task-item';
+
+    taskDiv.innerHTML = `
+        <span>${task.text}</span>
+        <div class="task-buttons">
+            <button class="complete-btn" data-id="${task.id}">
+                ${task.completed ? 'Reactivar' : 'Completar'}
+            </button>
+            <button class="delete-btn" data-id="${task.id}">Eliminar</button>
+        </div>
+    `;
+
+    const completeBtn = taskDiv.querySelector('.complete-btn');
+    const deleteBtn = taskDiv.querySelector('.delete-btn');
+
+    completeBtn.onclick = function () {
+        toggleTask(task.id);
+    };
+
+    deleteBtn.onclick = function () {
+        deleteTask(task.id);
+    };
+
+    return taskDiv;
+
+}
+
 function renderTasks() {
     let taskList = document.getElementById('taskList');
     taskList.innerHTML = ''; 
@@ -91,35 +124,8 @@ function renderTasks() {
     const filteredTasks = getFilteredTasks();
     
     for (let i = 0; i < filteredTasks.length; i++) {
-        let task = filteredTasks[i];
-        let taskDiv = document.createElement('div');
-        taskDiv.className = 'task-item';
-        
-        if (task.completed) {
-            taskDiv.className = 'task-item completed';
-        }
-        
-        taskDiv.innerHTML = 
-            `<span>${task.text}</span>
-            <div class="task-buttons">
-              <button class="complete-btn" data-id="${task.id}">
-                ${task.completed ? "Reactivar" : "Completar"}
-              </button>
-              <button class="delete-btn" data-id="${task.id}">Eliminar</button>
-            </div>`;
-
-        let completeBtn = taskDiv.querySelector('.complete-btn');
-        let deleteBtn = taskDiv.querySelector('.delete-btn');
-        
-        completeBtn.onclick = function() {
-            toggleTask(parseInt(this.getAttribute('data-id')));
-        };
-        
-        deleteBtn.onclick = function() {
-            deleteTask(parseInt(this.getAttribute('data-id')));
-        };
-        
-        taskList.appendChild(taskDiv);
+    const task = filteredTasks[i];
+    taskList.appendChild(createTaskElement(task));
     }
     
     if (filteredTasks.length === 0) {
@@ -135,24 +141,15 @@ function toggleTask(id) {
         }
     }
     
-    saveTasks();
-    
-    renderTasks();
-    updateStats();
+    refreshUI();
 }
 
 function deleteTask(id) {
-    let newTasks = [];
-    for (let i = 0; i < tasks.length; i++) {
-        if (tasks[i].id !== id) {
-            newTasks.push(tasks[i]);
-        }
-    }
-    tasks = newTasks;
-    saveTasks();
-    
-    renderTasks();
-    updateStats();
+    tasks = tasks.filter(function(task) {
+        return task.id !== id;
+    });
+
+    refreshUI();
 }
 
 function filterTasks(filter) {
