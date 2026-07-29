@@ -68,11 +68,11 @@ function renderTasks() {
     taskList.innerHTML = ''; 
 
     let filteredTasks = tasks;
-    if (currentFilter == 'active') {
+    if (currentFilter === 'active') {
         filteredTasks = tasks.filter(function(task) {
             return !task.completed;
         });
-    } else if (currentFilter == 'completed') {
+    } else if (currentFilter === 'completed') {
         filteredTasks = tasks.filter(function(task) {
             return task.completed;
         });
@@ -154,7 +154,7 @@ function filterTasks(filter) {
     
     if (filter === 'all') {
         buttons[0].classList.add('active');
-    } else if (filter == 'active') {
+    } else if (filter === 'active') {
         buttons[1].classList.add('active');
     } else {
         buttons[2].classList.add('active');
