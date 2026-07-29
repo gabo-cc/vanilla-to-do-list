@@ -4,30 +4,36 @@ let tasks = [];
 let taskId = 1;
 let currentFilter = 'all';
 
-
-window.onload = function() {
-    let savedTasks = localStorage.getItem('tasks');
+function loadTasks() {
+    const savedTasks = localStorage.getItem('tasks');
 
     if (savedTasks) {
         tasks = JSON.parse(savedTasks);
         taskId = tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1;
     }
-    
+}
+
+function setupEventListeners() {
     document.getElementById('addBtn').onclick = addTask;
-    
-    let filterButtons = document.querySelectorAll('.filter-btn');
+
+    const filterButtons = document.querySelectorAll('.filter-btn');
+
     for (let i = 0; i < filterButtons.length; i++) {
         filterButtons[i].onclick = function() {
             filterTasks(this.getAttribute('data-filter'));
         };
     }
-    
-    document.getElementById('taskInput').onkeypress = function(e) {
-        if (e.key === 'Enter') {
+
+    document.getElementById('taskInput').onkeypress = function (event) {
+        if (event.key === 'Enter') {
             addTask();
         }
     };
-    
+}
+
+window.onload = function() {
+    loadTasks();
+    setupEventListeners();  
     renderTasks();
     updateStats();
 };
