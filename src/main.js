@@ -68,23 +68,28 @@ function addTask() {
     updateStats();
 }
 
+function getFilteredTasks() {
+    if (currentFilter === 'active') {
+        return tasks.filter(function(task) {
+            return !task.completed;
+        });
+    }
+
+    if (currentFilter === 'completed') {
+        return tasks.filter(function(task) {
+            return task.completed;
+        });
+    }
+
+    return tasks;
+}
 
 function renderTasks() {
     let taskList = document.getElementById('taskList');
     taskList.innerHTML = ''; 
 
-    let filteredTasks = tasks;
-    if (currentFilter === 'active') {
-        filteredTasks = tasks.filter(function(task) {
-            return !task.completed;
-        });
-    } else if (currentFilter === 'completed') {
-        filteredTasks = tasks.filter(function(task) {
-            return task.completed;
-        });
-    }
+    const filteredTasks = getFilteredTasks();
     
-
     for (let i = 0; i < filteredTasks.length; i++) {
         let task = filteredTasks[i];
         let taskDiv = document.createElement('div');
