@@ -118,7 +118,7 @@ function renderTasks() {
 
 function toggleTask(id) {
     for (let i = 0; i < tasks.length; i++) {
-        if (tasks[i].id == id) {
+        if (tasks[i].id === id) {
             tasks[i].completed = !tasks[i].completed;
             break;
         }
@@ -133,7 +133,7 @@ function toggleTask(id) {
 function deleteTask(id) {
     let newTasks = [];
     for (let i = 0; i < tasks.length; i++) {
-        if (tasks[i].id != id) {
+        if (tasks[i].id !== id) {
             newTasks.push(tasks[i]);
         }
     }
@@ -152,7 +152,7 @@ function filterTasks(filter) {
         buttons[i].classList.remove('active');
     }
     
-    if (filter == 'all') {
+    if (filter === 'all') {
         buttons[0].classList.add('active');
     } else if (filter == 'active') {
         buttons[1].classList.add('active');
