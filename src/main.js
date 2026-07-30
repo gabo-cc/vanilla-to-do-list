@@ -74,15 +74,11 @@ function addTask() {
 
 function getFilteredTasks() {
     if (currentFilter === 'active') {
-        return tasks.filter(function(task) {
-            return !task.completed;
-        });
+        return tasks.filter(task => !task.completed);
     }
 
     if (currentFilter === 'completed') {
-        return tasks.filter(function(task) {
-            return task.completed;
-        });
+        return tasks.filter(task => task.completed);
     }
 
     return tasks;
@@ -124,8 +120,8 @@ function renderTasks() {
     const filteredTasks = getFilteredTasks();
     
     for (let i = 0; i < filteredTasks.length; i++) {
-    const task = filteredTasks[i];
-    taskList.appendChild(createTaskElement(task));
+        const task = filteredTasks[i];
+        taskList.appendChild(createTaskElement(task));
     }
     
     if (filteredTasks.length === 0) {
@@ -145,9 +141,7 @@ function toggleTask(id) {
 }
 
 function deleteTask(id) {
-    tasks = tasks.filter(function(task) {
-        return task.id !== id;
-    });
+    tasks = tasks.filter(task => task.id !== id);
 
     refreshUI();
 }
@@ -171,19 +165,14 @@ function filterTasks(filter) {
     renderTasks();
 }
 
-function updateStats() {
-    let total = tasks.length;
-    let completed = 0;
-    let active = 0;
-    
-    for (let i = 0; i < tasks.length; i++) {
-        if (tasks[i].completed) {
-            completed++;
-        } else {
-            active++;
-        }
-    }
-    
-    let statsDiv = document.getElementById('stats');
-    statsDiv.innerHTML = 'Total: ' + total + ' | Completadas: ' + completed + ' | Activas: ' + active;
+function updateStats(){
+
+    const total = tasks.length;
+
+    const completed = tasks.filter(task => task.completed).length;
+
+    const active = total - completed;
+
+    document.getElementById('stats').innerHTML =
+    `Total: ${total} | Completadas: ${completed} | Activas: ${active}`;
 }
